@@ -718,7 +718,8 @@ document.addEventListener('keydown', e => {
   if (document.activeElement.tagName === 'INPUT') return;
   if ((e.key === 'p' || e.key === 'P') && running) {
     paused = !paused;
-    if (!paused) gameLoop();
+    if (paused) cancelAnimationFrame(raf);
+    else gameLoop();
     return;
   }
   if (!running || paused) return;
@@ -758,10 +759,11 @@ document.getElementById('start-btn').addEventListener('click', () => {
 
 document.getElementById('submit-btn').addEventListener('click', async function() {
   this.disabled = true;
-  this.textContent = 'Submitted!';
+  this.textContent = 'Submitting…';
   const name = document.getElementById('player-name').value.trim() || 'ANON';
   savePlayerName(name);
-  try { await submitScore('runner', name, score); } catch(_) {}
+  try { await submitScore('runner', name, score); this.textContent = 'Submitted!'; }
+  catch(_) { this.disabled = false; this.textContent = 'Retry Submit'; }
 });
 
 document.getElementById('replay-btn').addEventListener('click', () => {

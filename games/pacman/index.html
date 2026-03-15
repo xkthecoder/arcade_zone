@@ -639,10 +639,11 @@ document.getElementById('start-btn').addEventListener('click', () => {
 
 document.getElementById('submit-btn').addEventListener('click', async function() {
   this.disabled = true;
-  this.textContent = 'Submitted!';
+  this.textContent = 'Submitting…';
   const name = document.getElementById('player-name').value.trim() || 'ANON';
   savePlayerName(name);
-  try { await submitScore('pacman', name, score); } catch (_) {}
+  try { await submitScore('pacman', name, score); this.textContent = 'Submitted!'; }
+  catch(_) { this.disabled = false; this.textContent = 'Retry Submit'; }
 });
 
 document.getElementById('replay-btn').addEventListener('click', () => {

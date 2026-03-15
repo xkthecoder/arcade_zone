@@ -125,17 +125,31 @@
       <div class="section-divider"></div>
     </div>
 
-    <div class="tab-bar" id="tab-bar">
-      <button class="tab-btn active" data-game="snake">Snake</button>
-      <button class="tab-btn" data-game="breakout">Breakout</button>
-      <button class="tab-btn" data-game="runner">Runner</button>
-      <button class="tab-btn" data-game="tetris">Tetris</button>
-      <button class="tab-btn" data-game="space-shooter">Space</button>
-      <button class="tab-btn" data-game="pacman">Pac-Man</button>
-    </div>
-
-    <div id="leaderboard-pane">
-      <p class="lb-empty">Loading...</p>
+    <div class="hof-grid" id="hof-grid">
+      <div class="hof-panel" style="--card-color:#22c55e">
+        <div class="hof-panel-title">Snake</div>
+        <div class="hof-panel-body" id="hof-snake"><span class="lb-empty">Loading…</span></div>
+      </div>
+      <div class="hof-panel" style="--card-color:#38bdf8">
+        <div class="hof-panel-title">Breakout</div>
+        <div class="hof-panel-body" id="hof-breakout"><span class="lb-empty">Loading…</span></div>
+      </div>
+      <div class="hof-panel" style="--card-color:#f59e0b">
+        <div class="hof-panel-title">Temple Run</div>
+        <div class="hof-panel-body" id="hof-runner"><span class="lb-empty">Loading…</span></div>
+      </div>
+      <div class="hof-panel" style="--card-color:#a855f7">
+        <div class="hof-panel-title">Tetris</div>
+        <div class="hof-panel-body" id="hof-tetris"><span class="lb-empty">Loading…</span></div>
+      </div>
+      <div class="hof-panel" style="--card-color:#6366f1">
+        <div class="hof-panel-title">Space Shooter</div>
+        <div class="hof-panel-body" id="hof-space-shooter"><span class="lb-empty">Loading…</span></div>
+      </div>
+      <div class="hof-panel" style="--card-color:#eab308">
+        <div class="hof-panel-title">Pac-Man</div>
+        <div class="hof-panel-body" id="hof-pacman"><span class="lb-empty">Loading…</span></div>
+      </div>
     </div>
   </section>
 
@@ -152,7 +166,6 @@
   import { getTopScores, getHiScore } from './js/leaderboard.js';
 
   const GAMES = ['snake', 'breakout', 'runner', 'tetris', 'space-shooter', 'pacman'];
-  let currentGame = 'snake';
 
   // --- Draw pixel-art thumbnails ---
   function drawThumbnails() {
@@ -320,31 +333,24 @@
   }
 
   // --- Leaderboard ---
-  async function loadLeaderboard(game) {
-    const pane = document.getElementById('leaderboard-pane');
-    pane.innerHTML = '<p class="lb-empty">Loading...</p>';
+  async function loadHofPanel(game) {
+    const pane = document.getElementById(`hof-${game}`);
+    if (!pane) return;
     try {
-      const scores = await getTopScores(game, 5);
+      const scores = await getTopScores(game, 3);
       if (scores.length === 0) {
-        pane.innerHTML = '<p class="lb-empty">No scores yet — be the first!</p>';
+        pane.innerHTML = '<span class="lb-empty">No scores yet</span>';
         return;
       }
-      const medals = ['🥇','🥈','🥉','4','5'];
-      const rows = scores.map((s, i) => `
-        <tr class="rank-${i+1}">
-          <td><span class="rank-badge">${medals[i]}</span></td>
-          <td class="player-name">${escHtml(s.player)}</td>
-          <td class="score-val">${s.score.toLocaleString()}</td>
-        </tr>`).join('');
-      pane.innerHTML = `
-        <table class="leaderboard-table">
-          <thead><tr>
-            <th>#</th><th>Player</th><th>Score</th>
-          </tr></thead>
-          <tbody>${rows}</tbody>
-        </table>`;
+      const medals = ['🥇','🥈','🥉'];
+      pane.innerHTML = scores.map((s, i) => `
+        <div class="hof-row">
+          <span class="hof-rank">${medals[i]}</span>
+          <span class="hof-player">${escHtml(s.player)}</span>
+          <span class="hof-score">${s.score.toLocaleString()}</span>
+        </div>`).join('');
     } catch (e) {
-      pane.innerHTML = '<p class="lb-empty">Firebase not configured yet</p>';
+      pane.innerHTML = '<span class="lb-empty">—</span>';
     }
   }
 
@@ -364,19 +370,9 @@
     return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 
-  // --- Tabs ---
-  document.getElementById('tab-bar').addEventListener('click', e => {
-    const btn = e.target.closest('.tab-btn');
-    if (!btn) return;
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    currentGame = btn.dataset.game;
-    loadLeaderboard(currentGame);
-  });
-
   // --- Init ---
   drawThumbnails();
-  loadLeaderboard('snake');
+  GAMES.forEach(g => loadHofPanel(g));
   loadHiScores();
 </script>
 
