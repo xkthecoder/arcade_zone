@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Arcade Zone</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕹️</text></svg>" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+    /* Lucide icon sizing in context */
+    .icon-sm { width: 16px; height: 16px; display: inline-block; vertical-align: middle; }
+    .icon-md { width: 20px; height: 20px; display: inline-block; vertical-align: middle; }
+    .icon-lg { width: 28px; height: 28px; display: inline-block; vertical-align: middle; }
+    [data-lucide] { stroke-width: 2; }
+    .section-header [data-lucide] { color: var(--text-muted); }
+    .hud-icon { display: flex; align-items: center; gap: 8px; }
+  </style>
+</head>
+<body>
+
+<!-- ========== HEADER ========== -->
+<header class="site-header">
+  <div class="site-logo">
+    <i data-lucide="gamepad-2" class="icon-sm" style="margin-right:6px;color:var(--primary)"></i>
+    Arcade Zone
+  </div>
+  <h1 class="site-title"><span class="gradient-text">Arcade Zone</span></h1>
+  <p class="site-subtitle">Six handcrafted browser games. Pick one and beat the leaderboard.</p>
+</header>
+
+<!-- ========== MAIN ========== -->
+<main class="main-content">
+
+  <!-- GAME GRID -->
+  <section aria-label="Games">
+    <div class="section-header">
+      <i data-lucide="grid-2x2" class="icon-md"></i>
+      <h2>Games</h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="game-grid" id="game-grid">
+
+      <!-- Snake -->
+      <div class="game-card" style="--card-color:#22c55e;--card-glow:rgba(34,197,94,0.3)"
+           onclick="location.href='games/snake/index.html'">
+        <div class="game-card-thumb" id="thumb-snake"></div>
+        <div class="game-card-body">
+          <div class="game-card-title">Snake</div>
+          <div class="game-card-hiscore" id="hi-snake">Best score: —</div>
+          <div class="game-tag">Arcade</div>
+          <a class="btn btn-game" href="games/snake/index.html" style="--card-color:#22c55e">▶ Play</a>
+        </div>
+      </div>
+
+      <!-- Breakout -->
+      <div class="game-card" style="--card-color:#38bdf8;--card-glow:rgba(56,189,248,0.3)"
+           onclick="location.href='games/breakout/index.html'">
+        <div class="game-card-thumb" id="thumb-breakout"></div>
+        <div class="game-card-body">
+          <div class="game-card-title">Breakout</div>
+          <div class="game-card-hiscore" id="hi-breakout">Best score: —</div>
+          <div class="game-tag">Classic</div>
+          <a class="btn btn-game" href="games/breakout/index.html" style="--card-color:#38bdf8">▶ Play</a>
+        </div>
+      </div>
+
+      <!-- Temple Run -->
+      <div class="game-card" style="--card-color:#f59e0b;--card-glow:rgba(245,158,11,0.3)"
+           onclick="location.href='games/runner/index.html'">
+        <div class="game-card-thumb" id="thumb-runner"></div>
+        <div class="game-card-body">
+          <div class="game-card-title">Temple Run</div>
+          <div class="game-card-hiscore" id="hi-runner">Best score: —</div>
+          <div class="game-tag">Endless</div>
+          <a class="btn btn-game" href="games/runner/index.html" style="--card-color:#f59e0b">▶ Play</a>
+        </div>
+      </div>
+
+      <!-- Tetris -->
+      <div class="game-card" style="--card-color:#a855f7;--card-glow:rgba(168,85,247,0.3)"
+           onclick="location.href='games/tetris/index.html'">
+        <div class="game-card-thumb" id="thumb-tetris"></div>
+        <div class="game-card-body">
+          <div class="game-card-title">Tetris</div>
+          <div class="game-card-hiscore" id="hi-tetris">Best score: —</div>
+          <div class="game-tag">Puzzle</div>
+          <a class="btn btn-game" href="games/tetris/index.html" style="--card-color:#a855f7">▶ Play</a>
+        </div>
+      </div>
+
+      <!-- Space Shooter -->
+      <div class="game-card" style="--card-color:#6366f1;--card-glow:rgba(99,102,241,0.35)"
+           onclick="location.href='games/space-shooter/index.html'">
+        <div class="game-card-thumb" id="thumb-space-shooter"></div>
+        <div class="game-card-body">
+          <div class="game-card-title">Space Shooter</div>
+          <div class="game-card-hiscore" id="hi-space-shooter">Best score: —</div>
+          <div class="game-tag">Shooter</div>
+          <a class="btn btn-game" href="games/space-shooter/index.html" style="--card-color:#6366f1">▶ Play</a>
+        </div>
+      </div>
+
+      <!-- Pac-Man -->
+      <div class="game-card" style="--card-color:#eab308;--card-glow:rgba(234,179,8,0.3)"
+           onclick="location.href='games/pacman/index.html'">
+        <div class="game-card-thumb" id="thumb-pacman"></div>
+        <div class="game-card-body">
+          <div class="game-card-title">Pac-Man</div>
+          <div class="game-card-hiscore" id="hi-pacman">Best score: —</div>
+          <div class="game-tag">Maze</div>
+          <a class="btn btn-game" href="games/pacman/index.html" style="--card-color:#eab308">▶ Play</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- LEADERBOARD -->
+  <section class="leaderboard-section" aria-label="Leaderboard">
+    <div class="section-header" style="margin-bottom:24px">
+      <i data-lucide="trophy" class="icon-md" style="color:var(--amber)"></i>
+      <h2>Hall of Fame</h2>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="tab-bar" id="tab-bar">
+      <button class="tab-btn active" data-game="snake">Snake</button>
+      <button class="tab-btn" data-game="breakout">Breakout</button>
+      <button class="tab-btn" data-game="runner">Runner</button>
+      <button class="tab-btn" data-game="tetris">Tetris</button>
+      <button class="tab-btn" data-game="space-shooter">Space</button>
+      <button class="tab-btn" data-game="pacman">Pac-Man</button>
+    </div>
+
+    <div id="leaderboard-pane">
+      <p class="lb-empty">Loading...</p>
+    </div>
+  </section>
+
+</main>
+
+<!-- ========== FOOTER ========== -->
+<footer class="site-footer">
+  <p>Arcade Zone &copy; 2024 &nbsp;·&nbsp; Built with care and pixels</p>
+  <p style="margin-top:6px;font-size:12px">GitHub Pages + Firebase</p>
+</footer>
+
+<!-- ========== SCRIPTS ========== -->
+<script type="module">
+  import { getTopScores, getHiScore } from './js/leaderboard.js';
+
+  const GAMES = ['snake', 'breakout', 'runner', 'tetris', 'space-shooter', 'pacman'];
+  let currentGame = 'snake';
+
+  // --- Draw pixel-art thumbnails ---
+  function drawThumbnails() {
+    drawSnakeThumb();
+    drawBreakoutThumb();
+    drawRunnerThumb();
+    drawTetrisThumb();
+    drawSpaceThumb();
+    drawPacmanThumb();
+  }
+
+  function makeThumbCanvas(id) {
+    const el = document.getElementById(id);
+    const c = document.createElement('canvas');
+    c.width = 120; c.height = 80;
+    c.style.cssText = 'width:100%;height:100%;image-rendering:pixelated';
+    el.appendChild(c);
+    return c.getContext('2d');
+  }
+
+  function drawSnakeThumb() {
+    const ctx = makeThumbCanvas('thumb-snake');
+    ctx.fillStyle = '#0a0a0a';
+    ctx.fillRect(0,0,120,80);
+    ctx.fillStyle = '#39ff14';
+    // snake body
+    [[20,30],[30,30],[40,30],[40,40],[40,50]].forEach(([x,y]) => {
+      ctx.fillRect(x, y, 9, 9);
+    });
+    ctx.fillStyle = '#00ff88';
+    ctx.fillRect(20,30,9,9); // head
+    // food
+    ctx.fillStyle = '#ff0055';
+    ctx.fillRect(80, 50, 9, 9);
+    // grid dots
+    ctx.fillStyle = '#222';
+    for (let x = 10; x < 115; x += 10)
+      for (let y = 10; y < 75; y += 10)
+        ctx.fillRect(x,y,1,1);
+  }
+
+  function drawBreakoutThumb() {
+    const ctx = makeThumbCanvas('thumb-breakout');
+    ctx.fillStyle = '#0a0a0a';
+    ctx.fillRect(0,0,120,80);
+    // bricks
+    const colors = ['#ff0000','#ff7700','#ffff00','#00ff00'];
+    for (let row = 0; row < 4; row++) {
+      ctx.fillStyle = colors[row];
+      for (let col = 0; col < 5; col++) {
+        ctx.fillRect(8 + col*23, 8 + row*12, 20, 9);
+      }
+    }
+    // ball
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(55, 50, 6, 6);
+    // paddle
+    ctx.fillStyle = '#00ffff';
+    ctx.fillRect(40, 72, 40, 5);
+  }
+
+  function drawRunnerThumb() {
+    const ctx = makeThumbCanvas('thumb-runner');
+    ctx.fillStyle = '#0a0a0a';
+    ctx.fillRect(0,0,120,80);
+    // ground
+    ctx.fillStyle = '#39ff14';
+    ctx.fillRect(0, 65, 120, 2);
+    // player (dino-like)
+    ctx.fillStyle = '#00ffff';
+    ctx.fillRect(20, 50, 12, 15);
+    ctx.fillRect(20, 44, 16, 8);
+    ctx.fillRect(32, 46, 4, 4);
+    // obstacles
+    ctx.fillStyle = '#ff3333';
+    ctx.fillRect(70, 54, 8, 12);
+    ctx.fillRect(90, 50, 6, 16);
+    // clouds
+    ctx.fillStyle = '#333';
+    ctx.fillRect(50, 20, 20, 6);
+    ctx.fillRect(80, 14, 25, 6);
+  }
+
+  function drawTetrisThumb() {
+    const ctx = makeThumbCanvas('thumb-tetris');
+    ctx.fillStyle = '#0a0a0a';
+    ctx.fillRect(0,0,120,80);
+    const colors = ['#00ffff','#ffff00','#ff00ff','#ff7700','#0000ff','#00ff00','#ff0000'];
+    const pieces = [
+      {c:'#00ffff', cells:[[5,2],[5,3],[5,4],[5,5]]},
+      {c:'#ffff00', cells:[[3,5],[4,5],[3,6],[4,6]]},
+      {c:'#ff7700', cells:[[3,3],[3,4],[4,4],[4,5]]},
+      {c:'#00ff00', cells:[[4,6],[5,6],[5,7],[6,7]]},
+      {c:'#ff0000', cells:[[2,5],[3,5],[3,6],[4,6]]},
+    ];
+    pieces.forEach(p => {
+      ctx.fillStyle = p.c;
+      p.cells.forEach(([col,row]) => {
+        ctx.fillRect(col*10+10, row*10, 9, 9);
+      });
+    });
+    // board outline
+    ctx.strokeStyle = '#333355';
+    ctx.strokeRect(10,0,100,80);
+  }
+
+  function drawSpaceThumb() {
+    const ctx = makeThumbCanvas('thumb-space-shooter');
+    ctx.fillStyle = '#0a0a0a';
+    ctx.fillRect(0,0,120,80);
+    // stars
+    ctx.fillStyle = '#ffffff';
+    [[10,5],[30,15],[70,8],[90,20],[50,30],[110,12],[20,45],[85,50]].forEach(([x,y]) => {
+      ctx.fillRect(x,y,1,1);
+    });
+    // player ship
+    ctx.fillStyle = '#00ffff';
+    ctx.fillRect(55,62,10,8);
+    ctx.fillRect(57,56,6,7);
+    ctx.fillRect(59,53,2,4);
+    // bullet
+    ctx.fillStyle = '#39ff14';
+    ctx.fillRect(59,42,2,8);
+    // enemies
+    ctx.fillStyle = '#ff0055';
+    [[25,15],[55,15],[85,15],[40,28],[70,28]].forEach(([x,y]) => {
+      ctx.fillRect(x,y,12,8);
+      ctx.fillRect(x+3,y-3,6,4);
+    });
+  }
+
+  function drawPacmanThumb() {
+    const ctx = makeThumbCanvas('thumb-pacman');
+    ctx.fillStyle = '#0a0a0a';
+    ctx.fillRect(0,0,120,80);
+    // maze walls
+    ctx.fillStyle = '#0000ff';
+    ctx.fillRect(5,5,110,5);
+    ctx.fillRect(5,70,110,5);
+    ctx.fillRect(5,5,5,70);
+    ctx.fillRect(110,5,5,70);
+    ctx.fillRect(30,20,5,30);
+    ctx.fillRect(85,20,5,30);
+    // dots
+    ctx.fillStyle = '#ffff88';
+    for (let x = 20; x < 100; x += 12) ctx.fillRect(x,40,3,3);
+    // pacman
+    ctx.fillStyle = '#ffff00';
+    ctx.beginPath();
+    ctx.arc(25, 40, 8, 0.4, Math.PI * 2 - 0.4);
+    ctx.lineTo(25, 40);
+    ctx.fill();
+    // ghost
+    ctx.fillStyle = '#ff0055';
+    ctx.fillRect(80, 32, 16, 16);
+    ctx.beginPath();
+    ctx.arc(88, 36, 8, Math.PI, 0);
+    ctx.fill();
+    ctx.fillStyle = '#0a0a0a';
+    ctx.fillRect(82, 38, 4, 4);
+    ctx.fillRect(90, 38, 4, 4);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(83, 39, 2, 2);
+    ctx.fillRect(91, 39, 2, 2);
+  }
+
+  // --- Leaderboard ---
+  async function loadLeaderboard(game) {
+    const pane = document.getElementById('leaderboard-pane');
+    pane.innerHTML = '<p class="lb-empty">Loading...</p>';
+    try {
+      const scores = await getTopScores(game, 5);
+      if (scores.length === 0) {
+        pane.innerHTML = '<p class="lb-empty">No scores yet — be the first!</p>';
+        return;
+      }
+      const medals = ['🥇','🥈','🥉','4','5'];
+      const rows = scores.map((s, i) => `
+        <tr class="rank-${i+1}">
+          <td><span class="rank-badge">${medals[i]}</span></td>
+          <td class="player-name">${escHtml(s.player)}</td>
+          <td class="score-val">${s.score.toLocaleString()}</td>
+        </tr>`).join('');
+      pane.innerHTML = `
+        <table class="leaderboard-table">
+          <thead><tr>
+            <th>#</th><th>Player</th><th>Score</th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table>`;
+    } catch (e) {
+      pane.innerHTML = '<p class="lb-empty">Firebase not configured yet</p>';
+    }
+  }
+
+  async function loadHiScores() {
+    for (const game of GAMES) {
+      try {
+        const hi = await getHiScore(game);
+        const el = document.getElementById(`hi-${game}`);
+        if (el && hi) {
+          el.innerHTML = `Best: <strong>${hi.score.toLocaleString()}</strong> by ${escHtml(hi.player)}`;
+        }
+      } catch (_) {}
+    }
+  }
+
+  function escHtml(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  // --- Tabs ---
+  document.getElementById('tab-bar').addEventListener('click', e => {
+    const btn = e.target.closest('.tab-btn');
+    if (!btn) return;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentGame = btn.dataset.game;
+    loadLeaderboard(currentGame);
+  });
+
+  // --- Init ---
+  drawThumbnails();
+  loadLeaderboard('snake');
+  loadHiScores();
+</script>
+
+<!-- Initialise Lucide icons after DOM is ready -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    if (window.lucide) lucide.createIcons();
+  });
+  // Fallback if DOMContentLoaded already fired
+  if (document.readyState !== 'loading' && window.lucide) lucide.createIcons();
+</script>
+
+</body>
+</html>
