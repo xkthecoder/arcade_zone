@@ -221,6 +221,7 @@
   };
 
   document.addEventListener('keydown', e => {
+    if (document.activeElement.tagName === 'INPUT') return;
     if (e.key === 'p' || e.key === 'P') {
       paused = !paused;
       return;

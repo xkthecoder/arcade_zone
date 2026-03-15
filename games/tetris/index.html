@@ -402,6 +402,7 @@
   };
 
   document.addEventListener('keydown', e => {
+    if (document.activeElement.tagName === 'INPUT') return;
     if (!running) return;
     const action = keyMap[e.key];
     if (action) { e.preventDefault(); action(); }

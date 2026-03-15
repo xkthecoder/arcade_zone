@@ -90,7 +90,7 @@
   <button id="jump-btn">▲ JUMP</button>
 
   <div class="controls-hint" style="margin-top:12px">
-    <kbd>← →</kbd> Change lane &nbsp;·&nbsp; <kbd>Space</kbd> / <kbd>↑</kbd> Jump
+    <kbd>← →</kbd> Change lane &nbsp;·&nbsp; <kbd>Space</kbd> / <kbd>↑</kbd> Jump &nbsp;·&nbsp; <kbd>P</kbd> pause
   </div>
 </div>
 
@@ -152,7 +152,7 @@ const COLORS = {
 //  GAME STATE
 // ============================================================
 let player, obstacles, coins, particles, score, coinCount;
-let speed, distance, raf, running, frame;
+let speed, distance, raf, running, paused, frame;
 let laneChange = 0; // -1 left, 0 none, 1 right (animation)
 let laneProgress = 0;
 let shieldTime = 0;
@@ -684,6 +684,7 @@ function draw() {
 }
 
 function gameLoop() {
+  if (paused) return;
   update();
   draw();
   if (running || particles.length > 0) raf = requestAnimationFrame(gameLoop);
@@ -711,7 +712,13 @@ async function loadHiBest() {
 //  CONTROLS
 // ============================================================
 document.addEventListener('keydown', e => {
-  if (!running) return;
+  if (document.activeElement.tagName === 'INPUT') return;
+  if ((e.key === 'p' || e.key === 'P') && running) {
+    paused = !paused;
+    if (!paused) gameLoop();
+    return;
+  }
+  if (!running || paused) return;
   switch (e.key) {
     case 'ArrowLeft':  case 'a': case 'A': e.preventDefault(); moveLeft();  break;
     case 'ArrowRight': case 'd': case 'D': e.preventDefault(); moveRight(); break;

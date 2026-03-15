@@ -60,7 +60,7 @@
   </div>
 
   <div class="controls-hint" style="margin-top:12px">
-    <kbd>Mouse</kbd> to move paddle &nbsp;·&nbsp; <kbd>Click</kbd> to launch ball
+    <kbd>Mouse</kbd> to move paddle &nbsp;·&nbsp; <kbd>Click</kbd> to launch ball &nbsp;·&nbsp; <kbd>P</kbd> pause
   </div>
 </div>
 
@@ -98,7 +98,7 @@
   ];
   const POINTS = [70, 60, 50, 40, 30, 20];
 
-  let paddle, ball, bricks, score, lives, level, running, launched, raf;
+  let paddle, ball, bricks, score, lives, level, running, paused, launched, raf;
   let touchLeft = false, touchRight = false;
 
   function makeBricks(lvl) {
@@ -151,7 +151,7 @@
   }
 
   function gameLoop() {
-    if (!running) return;
+    if (!running || paused) return;
     update();
     draw();
     raf = requestAnimationFrame(gameLoop);
@@ -288,6 +288,14 @@
   });
 
   canvas.addEventListener('click', () => { if (!launched) launched = true; });
+
+  document.addEventListener('keydown', e => {
+    if (document.activeElement.tagName === 'INPUT') return;
+    if ((e.key === 'p' || e.key === 'P') && running) {
+      paused = !paused;
+      if (!paused) gameLoop();
+    }
+  });
 
   document.getElementById('touch-left').addEventListener('pointerdown', () => touchLeft = true);
   document.getElementById('touch-left').addEventListener('pointerup', () => touchLeft = false);

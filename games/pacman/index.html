@@ -607,6 +607,7 @@ const DIR = {
 };
 
 document.addEventListener('keydown', e => {
+  if (document.activeElement.tagName === 'INPUT') return;
   if (!running) return;
   const d = DIR[e.key];
   if (d) { e.preventDefault(); pac.ndy = d.dy; pac.ndx = d.dx; }
