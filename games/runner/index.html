@@ -698,6 +698,8 @@ function showModal() {
   document.getElementById('final-score').textContent = score.toLocaleString();
   document.getElementById('final-coins').textContent = coinCount;
   document.getElementById('player-name').value = getSavedPlayerName();
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = false; btn.textContent = 'Submit Score';
   document.getElementById('modal').classList.add('show');
 }
 

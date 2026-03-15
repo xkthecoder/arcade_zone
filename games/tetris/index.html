@@ -380,6 +380,8 @@
     document.getElementById('final-score').textContent = score.toLocaleString();
     const saved = getSavedPlayerName();
     document.getElementById('player-name').value = saved;
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = false; btn.textContent = 'Submit Score';
     document.getElementById('modal').classList.add('show');
   }
 
