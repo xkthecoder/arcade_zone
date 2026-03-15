@@ -123,7 +123,40 @@ const firebaseConfig = {
 
 > **Firestore free tier limits:** 50,000 reads/day · 20,000 writes/day · 1 GB storage — more than enough for a group of friends.
 
-### 2. GitHub Pages
+### 2. Securing the API key (recommended)
+
+The Firebase API key is safe to include in public code — it only identifies your project. Access is controlled by two layers:
+
+**a) Restrict the API key to your domain**
+
+1. Go to [console.cloud.google.com](https://console.cloud.google.com) → **APIs & Services → Credentials**
+2. Click your Browser key → **Application restrictions → HTTP referrers**
+3. Add: `https://YOUR_USERNAME.github.io/*`
+4. Save — the key will now only work from your live site
+
+**b) Update Firestore Security Rules**
+
+In Firebase console → Firestore → Rules:
+
+```
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /scores/{doc} {
+      allow read: if true;
+      allow write: if request.resource.data.keys().hasAll(['game','player','score','timestamp'])
+                   && request.resource.data.score is int
+                   && request.resource.data.score >= 0
+                   && request.resource.data.player is string
+                   && request.resource.data.player.size() <= 20;
+    }
+  }
+}
+```
+
+This allows anyone to read scores (public leaderboard) but only permits writes with valid, well-formed data.
+
+### 3. GitHub Pages
 
 ```bash
 git init
@@ -139,7 +172,7 @@ Your site will be live at: `https://YOUR_USERNAME.github.io/arcade`
 
 > Firebase requires HTTPS, which GitHub Pages provides automatically.
 
-### 3. Local Testing
+### 4. Local Testing
 
 Run a local server from the project root (required for ES module imports):
 
@@ -190,6 +223,16 @@ const hi = await getHiScore('breakout');
 ---
 
 ## Changelog
+
+### v1.2.0 — 2026-03-16
+
+**Bug fixes + security hardening**
+
+- **10 gameplay fixes** — Pac-Man level transition freeze, Temple Run score accuracy, Breakout win condition (5 levels), Snake speed cap, Space Shooter win state, D-pad responsiveness (click → pointerdown), Tetris MAX level indicator, Breakout score multiplier display, Space Shooter fire rate balance, Pac-Man ghost-eat multiplier accuracy
+- **Hall of Fame redesign** — replaced tabbed leaderboard with all-games-at-a-glance 6-panel grid (top 3 per game, visible without clicking)
+- **Submit flow** — "Submitting…" state during Firebase write, "Submitted!" on success, "Retry Submit" on failure; button stays disabled after submission
+- **Security** — API key restricted to production domain via Google Cloud Console; Firestore rules updated with data validation
+- **WASD / input fix** — keyboard game controls no longer fire when typing in the name input field
 
 ### v1.1.0 — 2026-03-15
 

@@ -171,6 +171,7 @@
     // Enemy movement
     const aliveEnemies = enemies.filter(e => e.alive);
     if (aliveEnemies.length === 0) {
+      if (wave >= 10) { gameWin(); return; }
       wave++;
       enemies = makeEnemyGrid(wave);
       updateHUD();
@@ -199,7 +200,7 @@
     // Enemy shooting
     enemyShootTimer--;
     if (enemyShootTimer <= 0) {
-      enemyShootTimer = Math.max(25, 60 - wave * 5);
+      enemyShootTimer = Math.max(40, 70 - wave * 4);
       const shooters = aliveEnemies.filter(e => {
         const col = Math.round(e.x / 52);
         return !aliveEnemies.some(e2 => e2 !== e && Math.round(e2.x/52) === col && e2.y > e.y);
@@ -332,11 +333,21 @@
     draw();
     ctx.fillStyle = 'rgba(255,0,0,0.4)';
     ctx.fillRect(0,0,W,H);
-    setTimeout(showModal, 500);
+    setTimeout(() => showModal(false), 500);
   }
 
-  function showModal() {
-    document.getElementById('modal-title').textContent = 'Game Over';
+  function gameWin() {
+    running = false;
+    cancelAnimationFrame(raf);
+    draw();
+    ctx.fillStyle = 'rgba(0,255,100,0.2)';
+    ctx.fillRect(0,0,W,H);
+    setTimeout(() => showModal(true), 500);
+  }
+
+  function showModal(win = false) {
+    document.getElementById('modal-title').textContent = win ? 'You Win! 🎉' : 'Game Over';
+    document.getElementById('modal-title').style.color = win ? 'var(--green)' : '';
     document.getElementById('final-score').textContent = score.toLocaleString();
     const saved = getSavedPlayerName();
     document.getElementById('player-name').value = saved;

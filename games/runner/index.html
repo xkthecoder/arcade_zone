@@ -386,13 +386,14 @@ function update() {
   particles.forEach(p => { p.x += p.vx; p.y += p.vy; p.vy += 0.15; p.life--; });
   particles = particles.filter(p => p.life > 0);
 
-  // Add score from distance
-  score = Math.floor(distance) + coinCount * 50;
+  // Add score from distance (frozen at death in playerDie)
+  if (running) score = Math.floor(distance) + coinCount * 50;
 }
 
 function playerDie() {
   player.dead = true;
   running = false;
+  score = Math.floor(distance) + coinCount * 50; // freeze final score
   // Explosion particles
   for (let i = 0; i < 20; i++) {
     const angle = Math.random() * Math.PI * 2;

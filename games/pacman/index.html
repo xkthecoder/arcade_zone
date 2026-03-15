@@ -124,7 +124,7 @@ const MAZE_TEMPLATE = [
 //  GAME STATE
 // ============================================================
 let maze, pac, ghosts, score, lives, level, running, paused;
-let raf, tickTimer, frame, frightenTimer, ghostEatMult;
+let raf, tickTimer, levelTransTimer, frame, frightenTimer, ghostEatMult;
 
 const TICK_MS   = 155; // ms per move step (lower = faster)
 const FRIGHT_MS = 7000; // power pellet duration
@@ -238,7 +238,7 @@ function stepPac() {
     maze[pac.row][pac.col] = 0;
     score += 50;
     frightenTimer = Date.now() + FRIGHT_MS;
-    ghostEatMult = 1;
+    ghostEatMult = 1; // reset multiplier on new pellet (fresh scare window)
     ghosts.forEach(g => {
       if (g.state === GS.ROAM || g.state === GS.FRIGHT) g.state = GS.FRIGHT;
     });
@@ -249,7 +249,11 @@ function stepPac() {
   if (countDots() === 0) {
     clearInterval(tickTimer);
     cancelAnimationFrame(raf);
-    setTimeout(() => { initLevel(level + 1); startTick(); startRaf(); }, 1200);
+    levelTransTimer = setTimeout(() => {
+      levelTransTimer = null;
+      initLevel(level + 1);
+      if (!paused) { startTick(); startRaf(); }
+    }, 1200);
   }
 }
 
@@ -258,6 +262,7 @@ function stepGhost(g) {
   // Handle fright expiry
   if (g.state === GS.FRIGHT && frightenTimer && Date.now() > frightenTimer) {
     g.state = GS.ROAM;
+    ghostEatMult = 1; // reset chain multiplier when scare window ends
   }
 
   // Release countdown
@@ -583,6 +588,7 @@ function startTick() {
 function showModal(win = false) {
   cancelAnimationFrame(raf);
   clearInterval(tickTimer);
+  if (levelTransTimer) { clearTimeout(levelTransTimer); levelTransTimer = null; }
   const title = document.getElementById('modal-title');
   title.textContent = win ? 'Level Clear! 🎉' : 'Game Over';
   title.style.color = win ? 'var(--green)' : 'var(--red)';
@@ -615,8 +621,12 @@ document.addEventListener('keydown', e => {
   if (d) { e.preventDefault(); pac.ndy = d.dy; pac.ndx = d.dx; }
   if (e.key === 'p' || e.key === 'P') {
     paused = !paused;
-    if (!paused) { startTick(); startRaf(); }
-    else { clearInterval(tickTimer); cancelAnimationFrame(raf); }
+    if (!paused) {
+      if (!levelTransTimer) { startTick(); startRaf(); }
+    } else {
+      clearInterval(tickTimer);
+      cancelAnimationFrame(raf);
+    }
   }
 });
 
@@ -627,7 +637,7 @@ const DPAD = {
   'dpad-right': {dy:0,dx:1},
 };
 Object.entries(DPAD).forEach(([id, d]) => {
-  document.getElementById(id)?.addEventListener('click', () => { pac.ndy = d.dy; pac.ndx = d.dx; });
+  document.getElementById(id)?.addEventListener('pointerdown', () => { pac.ndy = d.dy; pac.ndx = d.dx; });
 });
 
 document.getElementById('start-btn').addEventListener('click', () => {

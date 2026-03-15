@@ -299,7 +299,9 @@
   function updateHUD() {
     document.getElementById('score').textContent = score.toLocaleString();
     document.getElementById('lines').textContent = lines;
-    document.getElementById('level').textContent = level;
+    const lvlEl = document.getElementById('level');
+    lvlEl.textContent = level >= 11 ? `${level} MAX` : level;
+    lvlEl.style.color = level >= 11 ? 'var(--amber)' : '';
   }
 
   function drawCell(context, x, y, color, alpha=1) {

@@ -32,7 +32,7 @@
     </div>
     <div class="hud-item">
       <span class="hud-label">Level</span>
-      <span class="hud-val" id="level">1</span>
+      <span class="hud-val" id="level">1 <span id="multiplier" style="font-size:11px;opacity:0.6">(x1 pts)</span></span>
     </div>
     <div class="hud-item">
       <span class="hud-label">Lives</span>
@@ -140,7 +140,8 @@
 
   function updateHUD() {
     document.getElementById('score').textContent = score.toLocaleString();
-    document.getElementById('level').textContent = level;
+    document.getElementById('level').firstChild.textContent = level + ' ';
+    document.getElementById('multiplier').textContent = `(x${level} pts)`;
     document.getElementById('lives').textContent = '♥'.repeat(lives);
   }
 
@@ -220,11 +221,14 @@
     }
 
     if (allGone) {
-      // Level clear!
-      level++;
-      bricks = makeBricks(level);
-      resetBall();
-      updateHUD();
+      if (level >= 5) {
+        endGame(true);
+      } else {
+        level++;
+        bricks = makeBricks(level);
+        resetBall();
+        updateHUD();
+      }
     }
   }
 
